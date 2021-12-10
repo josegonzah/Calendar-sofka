@@ -15,6 +15,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Flux;
+import reactor.test.StepVerifier;
+
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -41,8 +43,12 @@ class SchedulerServiceTest {
         Mockito.when(repository.findById(programId)).thenReturn(Mono.just(program));
         //TODO: hacer una subscripción de el servicio reactivo
         Flux<ProgramDate> response = schedulerService.generateCalendar(programId, startDate);
+        response.subscribe();
+        StepVerifier.create(response)
+                .expectNextCount(13)
+                .verifyComplete();
 
-        Assertions.assertEquals(13, response.size());//TODO: hacer de otro modo
+        //Assertions.assertEquals(13, response.size());//TODO: hacer de otro modo
         Assertions.assertEquals(getSnapResult(), new Gson().toJson(response));//TODO: hacer de otro modo
         Mockito.verify(repository).findById(programId);
     }
