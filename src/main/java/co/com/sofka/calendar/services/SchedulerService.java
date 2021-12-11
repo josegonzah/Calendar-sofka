@@ -32,11 +32,11 @@ public class SchedulerService {
 
         var program = programRepository.findById(programId);
 
-        var result = program
+        return program
                 .flatMapMany(programa -> Flux.fromStream(getDurationOf(programa)))
                 .map(toProgramDate(startDate, endDate, pivot[0], index))
-                .switchIfEmpty(Mono.error(new RuntimeException("Objeto Vacio")));
-        return result;
+                .switchIfEmpty(Mono.error(new RuntimeException("Objeto vacio")));
+
     }
 
     //No tocar
