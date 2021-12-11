@@ -46,7 +46,7 @@ class SchedulerServiceTest {
 
         StepVerifier.create(response)
                 .expectNextCount(6)
-                .verifyComplete();
+                .expectComplete();
 
         StepVerifier.create(response)
                 .expectNextMatches(programDate ->
@@ -71,7 +71,7 @@ class SchedulerServiceTest {
                 )
                 .expectNextMatches(programDate ->
                         programDate.getDate().toString().equals("2022-01-10")
-                                && programDate.getCategoryName().equals("Fundamentos")
+                                && programDate.getCategoryName().equals("Principios")
                 )
                 .verifyComplete();
 
@@ -84,12 +84,12 @@ class SchedulerServiceTest {
 
         Mockito.when(repository.findById(programId)).thenReturn(Mono.empty());
 
-        //TODO: hacer de otro modo
-        var exception = Assertions.assertThrows(RuntimeException.class, () -> {
-            schedulerService.generateCalendar(programId, startDate);//TODO: hacer una subscripción de el servicio reactivo
+        Flux<ProgramDate> response = schedulerService.generateCalendar(programId, startDate);
 
-        });
-        Assertions.assertEquals("El programa academnico no existe", exception.getMessage());//TODO: hacer de otro modo
+        StepVerifier.create(response)
+                        .expectErrorMessage("Objeto vacio")
+                                .verify();
+
         Mockito.verify(repository).findById(programId);
 
     }

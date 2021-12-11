@@ -23,4 +23,13 @@ public final class ProgramDate {
     public String getCategoryName() {
         return categoryName;
     }
+
+    @Override
+    public String toString() {
+        return "ProgramDate{" +
+                "id='" + id + '\'' +
+                ", categoryName='" + categoryName + '\'' +
+                ", date=" + date +
+                '}';
+    }
 }
