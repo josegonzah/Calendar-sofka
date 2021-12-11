@@ -41,16 +41,40 @@ class SchedulerServiceTest {
         Program program = getProgramDummy();
 
         Mockito.when(repository.findById(programId)).thenReturn(Mono.just(program));
-        //TODO: hacer una subscripción de el servicio reactivo
         Flux<ProgramDate> response = schedulerService.generateCalendar(programId, startDate);
         response.subscribe();
+
         StepVerifier.create(response)
-                .expectNextCount(13)
+                .expectNextCount(6)
                 .verifyComplete();
 
-        //Assertions.assertEquals(13, response.size());//TODO: hacer de otro modo
-        Assertions.assertEquals(getSnapResult(), new Gson().toJson(response));//TODO: hacer de otro modo
-        Mockito.verify(repository).findById(programId);
+        StepVerifier.create(response)
+                .expectNextMatches(programDate ->
+                        programDate.getDate().toString().equals("2022-01-03")
+                        && programDate.getCategoryName().equals("Principios")
+                )
+                .expectNextMatches(programDate ->
+                        programDate.getDate().toString().equals("2022-01-04")
+                                && programDate.getCategoryName().equals("Bases")
+                )
+                .expectNextMatches(programDate ->
+                        programDate.getDate().toString().equals("2022-01-05")
+                                && programDate.getCategoryName().equals("Bases")
+                )
+                .expectNextMatches(programDate ->
+                        programDate.getDate().toString().equals("2022-01-06")
+                                && programDate.getCategoryName().equals("Fundamentos")
+                )
+                .expectNextMatches(programDate ->
+                        programDate.getDate().toString().equals("2022-01-07")
+                                && programDate.getCategoryName().equals("Fundamentos")
+                )
+                .expectNextMatches(programDate ->
+                        programDate.getDate().toString().equals("2022-01-10")
+                                && programDate.getCategoryName().equals("Fundamentos")
+                )
+                .verifyComplete();
+
     }
 
     @Test
