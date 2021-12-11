@@ -55,7 +55,7 @@ class SchedulerServiceTest {
                 )
                 .expectNextMatches(programDate ->
                         programDate.getDate().toString().equals("2022-01-04")
-                                && programDate.getCategoryName().equals("Bases")
+                                && programDate.getCategoryName().equals("Principios")
                 )
                 .expectNextMatches(programDate ->
                         programDate.getDate().toString().equals("2022-01-05")
